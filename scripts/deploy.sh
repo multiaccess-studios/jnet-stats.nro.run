@@ -24,4 +24,16 @@ aws --endpoint-url "${endpoint}" s3 sync \
   "${repository_root}/dist/" \
   "s3://${S3_BUCKET}/" \
   --delete \
+  --exclude '*.html' \
+  --cache-control 'public, max-age=3600, stale-while-revalidate=86400' \
+  --only-show-errors
+
+aws --endpoint-url "${endpoint}" s3 sync \
+  "${repository_root}/dist/" \
+  "s3://${S3_BUCKET}/" \
+  --delete \
+  --exclude '*' \
+  --include '*.html' \
+  --cache-control 'public, max-age=60, must-revalidate' \
+  --content-type 'text/html; charset=utf-8' \
   --only-show-errors
