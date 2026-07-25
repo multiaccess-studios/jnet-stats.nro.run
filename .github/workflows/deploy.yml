@@ -1,0 +1,27 @@
+name: Deploy production
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jnet-stats-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, Linux, X64, llb-rdev]
+    timeout-minutes: 20
+    environment: production
+    env:
+      SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+      SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+      SCW_PROJECT_ID: ${{ vars.SCW_PROJECT_ID }}
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+    steps:
+      - uses: actions/checkout@v6
+      - run: nix flake check
+      - run: nix run .#deploy
