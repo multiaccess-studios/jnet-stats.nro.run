@@ -10,13 +10,18 @@
 
 ## Getting Started
 
-| Command         | Description                                  |
-| --------------- | -------------------------------------------- |
-| `bun install`   | Install dependencies                         |
-| `bun dev`       | Bun dev server w/ hot reload (`src/index.ts`) |
-| `bun lint`      | ESLint (TS + React)                          |
-| `bun format`    | Prettier 3                                   |
-| `bun run build` | Production build to `dist/`                  |
+```bash
+nix develop
+bun run dev
+```
+
+CI uses the repository's flake entry points:
+
+```bash
+nix flake check
+nix run .#check
+nix run .#build
+```
 
 The dev server hosts `src/index.html`, which mounts `src/frontend.tsx`. The production build emits static assets to `dist/`.
 
@@ -43,7 +48,8 @@ src/
 
 ## Deployment
 
-`bun run build` emits static assets in `dist/`. Host wherever you prefer (Cloudflare Pages, Netlify, S3, etc.). If you use the Bun server (`src/index.ts`), configure routes so unknown paths fall back to `index.html`.
+Merges to `main` deploy the generated `dist/` directory to the production
+Object Storage bucket from the `llb-rdev` runner.
 
 ## License
 
