@@ -20,10 +20,11 @@ fi
 export AWS_DEFAULT_REGION="${SCW_DEFAULT_REGION:-fr-par}"
 export AWS_EC2_METADATA_DISABLED=true
 
+# Retain prior assets for clients still using old HTML during a publish.
+# Upload every new asset successfully before replacing HTML.
 aws --endpoint-url "${endpoint}" s3 sync \
   "${repository_root}/dist/" \
   "s3://${S3_BUCKET}/" \
-  --delete \
   --exclude '*.html' \
   --cache-control 'public, max-age=3600, stale-while-revalidate=86400' \
   --only-show-errors
